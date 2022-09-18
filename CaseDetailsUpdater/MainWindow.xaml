@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CaseDetailsUpdater"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="852.251">
-    <Grid Margin="0,0,-55.4,-30">
+        Title="MainWindow" Height="440" Width="936">
+    <Grid Margin="0,0,10,-6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="213*"/>
             <ColumnDefinition Width="501*"/>
@@ -18,7 +18,7 @@
         <TextBox x:Name="fetchqry" HorizontalAlignment="Left" Height="155" Margin="150,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="516" Grid.ColumnSpan="2"/>
         <TextBox x:Name="cityGuid" HorizontalAlignment="Left" Height="23" Margin="361.6,24,0,0" TextWrapping="Wrap" Text="000000-0000-0000-0000-000000000000" VerticalAlignment="Top" Width="238" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Label Content="City GUID " HorizontalAlignment="Left" Margin="252.6,24,0,0" VerticalAlignment="Top" Width="109" Grid.Column="1"/>
-        <Label x:Name="statuslbl" Content="" HorizontalAlignment="Left" Margin="38.6,386,0,0" VerticalAlignment="Top" Width="561" Grid.ColumnSpan="2" Grid.Column="1" Background="#FFB6B2B2"/>
+        <Label x:Name="statuslbl" Content="" HorizontalAlignment="Left" Margin="38,381,0,0" VerticalAlignment="Top" Width="561" Grid.ColumnSpan="2" Grid.Column="1" Background="#FFB6B2B2"/>
         <Label Content="Select Query" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="111"/>
         <ComboBox x:Name="qryselectorbox" HorizontalAlignment="Left" Margin="182,69,0,0" VerticalAlignment="Top" Width="228" Grid.ColumnSpan="2" Height="25" SelectionChanged="qryselectorbox_SelectionChanged" Initialized="qryselectorbox_Initialized">
             <ComboBoxItem Content="Applicable to International Cities"/>
@@ -26,7 +26,6 @@
             <ComboBoxItem Content="Dev Query"/>
         </ComboBox>
         <Label Content="Application Status" HorizontalAlignment="Left" Margin="28,386,0,0" VerticalAlignment="Top" Width="160"/>
-        <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="337.6,333,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
     </Grid>
 </Window>

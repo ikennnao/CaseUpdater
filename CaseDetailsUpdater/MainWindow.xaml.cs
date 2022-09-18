@@ -18,6 +18,8 @@ using System.Configuration;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Crm.Sdk.Messages;
 using System.Net;
+using System.Threading;
+using System.Net.Http;
 
 namespace CaseDetailsUpdater
 {
@@ -37,10 +39,12 @@ namespace CaseDetailsUpdater
          
         }
 
-        private void connectToCRM()
+        private bool connectToCRM()
         {
             try
             {
+                
+                
                 string connectionString = ConfigurationManager.ConnectionStrings["Xrm"].ConnectionString;
                 if (!string.IsNullOrEmpty(connectionString))
                 {
@@ -48,16 +52,13 @@ namespace CaseDetailsUpdater
                     CrmServiceClient = new CrmServiceClient(connectionString);
                     if (!CrmServiceClient.IsReady)
                     {
-                        connectstatuslbl.Content = "Unable to connect to CRM";
-                        connectstatuslbl.Background = Brushes.Red;
-                        connectstatuslbl.Foreground = Brushes.White;
+                        
+                        connectionState = false;
                     }
                     else
                     {
                         connectionState = true;
-                        connectstatuslbl.Content = $"Connected to {CrmServiceClient.ConnectedOrgFriendlyName}";
-                        connectstatuslbl.Background = Brushes.Green;
-                        connectstatuslbl.Foreground = Brushes.White;
+                       
                     }
                 }
             }
@@ -65,14 +66,36 @@ namespace CaseDetailsUpdater
             {
                 connectstatuslbl.Content = ex.Message;
             }
+            return connectionState;
         }
 
-        private void crmConnectbtn_Click(object sender, RoutedEventArgs e)
+        private async void crmConnectbtn_Click(object sender, RoutedEventArgs e)
         {
             crmConnectbtn.IsEnabled = false;
             if (!connectionState)
             {
-                connectToCRM();
+                Task<bool> t = new Task<bool>(connectToCRM);
+                t.Start();
+
+                statuslbl.Content = "Connecting to CRM..";
+               bool connState =  await t;
+                if (!connState)
+                {
+                    connectstatuslbl.Content = "Unable to connect to CRM";
+                    connectstatuslbl.Background = Brushes.Red;
+                    connectstatuslbl.Foreground = Brushes.White;
+                    statuslbl.Content = "Connection Failed. Check CRM Connection string";
+
+                }
+                else
+                {
+                    statuslbl.Content = "Connection successful";
+                    connectstatuslbl.Content = $"Connected to {CrmServiceClient.ConnectedOrgFriendlyName}";
+                    connectstatuslbl.Background = Brushes.Green;
+                    connectstatuslbl.Foreground = Brushes.White;
+                }
+                
+                //connectToCRM();
                 
             }
             else
@@ -81,26 +104,61 @@ namespace CaseDetailsUpdater
             }
         }
 
-        private void executeqrybtn_Click(object sender, RoutedEventArgs e)
+        private async void executeqrybtn_Click(object sender, RoutedEventArgs e)
         {
-            statuslbl.Content = "Retrieving record count.....";
-            executeqrybtn.IsEnabled = false;
-             var pageNumber = 1;
+            string query = fetchqry.Text; int recordBeignProcessed = 0; List<Entity> records = new List<Entity>();
+            string cityId = cityGuid.Text;
+            Task<List<Entity>> GetRecordsTask = new Task<List<Entity>>(() =>
+            {
+                
+                return GetRecords(query);
+                
+            });
+            GetRecordsTask.Start();
+
+            statuslbl.Content = "Retreiving records....";
+             records =  await GetRecordsTask;
+            int recordCount = records.Count;
+            statuslbl.Content = $"Total number of records is {recordCount}";
+           // Thread.Sleep(5000);
+            statuslbl.Content = $"Processing of Case Records...";
+            //Thread.Sleep(3000);
+            //start new Task
+            foreach (Entity record in records)
+            {
+                Task updatecaseTask = new Task(() =>
+                {
+                    recordBeignProcessed++;
+                    //Thread.Sleep(1000);
+                    ExecuteUpdateCase(record,Guid.Parse(cityId));
+                });
+                updatecaseTask.Start();
+                await updatecaseTask;
+                statuslbl.Content = $"Processing {recordBeignProcessed} of {recordCount}";
+            }
+
+            statuslbl.Content = "Case Update Completed...";
+        }
+
+        private List<Entity> GetRecords(string fetchqry)
+        {
+            //executeqrybtn.IsEnabled = false;
+            var pageNumber = 1;
             var pagingCookie = string.Empty;
             var result = new List<Entity>();
             EntityCollection entCasesToUpdate;
             //read the fetch xml
-            fetchXML = fetchqry.Text;
+            fetchXML = fetchqry;
             FetchXmlToQueryExpressionRequest queryExpressionRequest = new FetchXmlToQueryExpressionRequest()
             {
                 FetchXml = fetchXML
             };
 
-           FetchXmlToQueryExpressionResponse resQuery =  (FetchXmlToQueryExpressionResponse)CrmServiceClient.Execute(queryExpressionRequest);
-           QueryExpression queryExpression = resQuery.Query;
+            FetchXmlToQueryExpressionResponse resQuery = (FetchXmlToQueryExpressionResponse)CrmServiceClient.Execute(queryExpressionRequest);
+            QueryExpression queryExpression = resQuery.Query;
             if (!string.IsNullOrEmpty(fetchXML))
             {
-                
+
                 do
                 {
                     if (pageNumber != 1)
@@ -122,23 +180,23 @@ namespace CaseDetailsUpdater
                         result.AddRange(entCasesToUpdate.Entities);
                         
                     }
-                    
+
                 }
                 while (entCasesToUpdate.MoreRecords);
-                statuslbl.Content = $"Total number of Records is {result.Count}";
-                executeqrybtn.IsEnabled = true;
-                //update case records 
-               ExecuteUpdateCase(result);
+
+               
+                //executeqrybtn.IsEnabled = true;
+                
             }
+            return result;
         }
 
-        private void ExecuteUpdateCase(List<Entity> entities)
+
+        private void ExecuteUpdateCase(Entity updatecase, Guid cityId)
         {
-          
+
             //get the case record and check if the case status is resolved
-            statuslbl.Content = "Updating cases....";
-                foreach (Entity updatecase in entities)
-                {
+           
                 int intialStateCode = updatecase.GetAttributeValue<OptionSetValue>("statecode").Value;
                 int intialStatusCode = updatecase.GetAttributeValue<OptionSetValue>("statuscode").Value;
                 if (intialStateCode != 0) // case is resolved or cancelled
@@ -160,7 +218,7 @@ namespace CaseDetailsUpdater
                     //Update the case details to International City
                     string[] cols = { "tc_city" };
                     Entity caseToUpdate = CrmServiceClient.Retrieve("incident", updatecase.Id, new ColumnSet(cols)) ;
-                    caseToUpdate.Attributes["tc_city"] = new EntityReference("cc_city", Guid.Parse(cityGuid.Text));
+                    caseToUpdate.Attributes["tc_city"] = new EntityReference("cc_city", cityId);
                     CrmServiceClient.Update(caseToUpdate);
 
                     // Close case back to original state
@@ -172,7 +230,7 @@ namespace CaseDetailsUpdater
                     var closeIncidentRequest = new CloseIncidentRequest
                     {
                         IncidentResolution = resolution,
-                        Status = new OptionSetValue(intialStatusCode),
+                        Status = new OptionSetValue(1000),
                         
                     };
                     CrmServiceClient.Execute(closeIncidentRequest);
@@ -181,18 +239,13 @@ namespace CaseDetailsUpdater
                 else
                 {
                     //Update the case details to International City
-                    updatecase.Attributes["tc_city"] = new EntityReference("cc_city", Guid.Parse(cityGuid.Text));
+                    updatecase.Attributes["tc_city"] = new EntityReference("cc_city", cityId);
                     CrmServiceClient.Update(updatecase);
                 }
-                }
-
-            statuslbl.Content = "Case Update Completed...";
-
-
-
-
 
         }
+
+
 
         private void qryselectorbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
