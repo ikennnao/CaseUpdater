@@ -20,6 +20,8 @@ using Microsoft.Crm.Sdk.Messages;
 using System.Net;
 using System.Threading;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace CaseDetailsUpdater
 {
@@ -45,7 +47,9 @@ namespace CaseDetailsUpdater
             {
                 
                 
-                string connectionString = ConfigurationManager.ConnectionStrings["Xrm"].ConnectionString;
+                string encryptedconnectionString = ConfigurationManager.ConnectionStrings["Xrm"].ConnectionString;
+                string connectionString = TripleDESDecrypt(encryptedconnectionString);
+
                 if (!string.IsNullOrEmpty(connectionString))
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -369,6 +373,29 @@ namespace CaseDetailsUpdater
             
         }
 
-        
+        private string TripleDESDecrypt(string strDecryptText)
+        {
+            string strDecryptedTxt = string.Empty;
+            string strTripleDESSaltKey = "sta!2021@vc#crm$v9.0%sau";
+
+            if (!string.IsNullOrWhiteSpace(strDecryptText) && !string.IsNullOrWhiteSpace(strTripleDESSaltKey))
+            {
+                byte[] rgbIv = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+                var rgbKey = Encoding.UTF8.GetBytes(strTripleDESSaltKey);
+                TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
+
+                byte[] inputByteArray = Convert.FromBase64String(strDecryptText);
+                MemoryStream ms = new MemoryStream();
+                CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(rgbKey, rgbIv), CryptoStreamMode.Write);
+                cs.Write(inputByteArray, 0, inputByteArray.Length);
+                cs.FlushFinalBlock();
+                Encoding encoding = Encoding.UTF8;
+                strDecryptedTxt = encoding.GetString(ms.ToArray());
+            }
+
+            return strDecryptedTxt;
+        }
+
+
     }
 }
