@@ -47,7 +47,7 @@ namespace CaseDetailsUpdater
             {
                 
                 
-                string encryptedconnectionString = ConfigurationManager.ConnectionStrings["Xrm"].ConnectionString;
+                string encryptedconnectionString = ConfigurationManager.ConnectionStrings["DevCrm"].ConnectionString;
                 string connectionString = TripleDESDecrypt(encryptedconnectionString);
 
                 if (!string.IsNullOrEmpty(connectionString))
@@ -111,7 +111,7 @@ namespace CaseDetailsUpdater
         private async void executeqrybtn_Click(object sender, RoutedEventArgs e)
         {
             string query = fetchqry.Text; int recordBeignProcessed = 0; List<Entity> records = new List<Entity>();
-            string cityId = cityGuid.Text;
+            string cityId = cityGuid.Text; 
             Task<List<Entity>> GetRecordsTask = new Task<List<Entity>>(() =>
             {
                 
@@ -122,7 +122,8 @@ namespace CaseDetailsUpdater
 
             statuslbl.Content = "Retreiving records....";
              records =  await GetRecordsTask;
-            int recordCount = records.Count;
+            int recordCount = records.Count();
+            
             statuslbl.Content = $"Total number of records is {recordCount}";
            // Thread.Sleep(5000);
             statuslbl.Content = $"Processing of Case Records...";
@@ -132,9 +133,16 @@ namespace CaseDetailsUpdater
             {
                 Task updatecaseTask = new Task(() =>
                 {
-                    recordBeignProcessed++;
+                recordBeignProcessed++;
                     //Thread.Sleep(1000);
-                    ExecuteUpdateCase(record,Guid.Parse(cityId));
+                    ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest()
+                    {
+                        WorkflowId = new Guid("a452ed63-add0-4e07-bb52-7444ed568a5d"),
+                        EntityId = record.Id
+                    };
+                    ExecuteWorkflowResponse res = (ExecuteWorkflowResponse) CrmServiceClient.Execute(executeWorkflowRequest);
+                    
+                   // ExecuteCaseCityUpdate(record,Guid.Parse(cityId));
                 });
                 updatecaseTask.Start();
                 await updatecaseTask;
@@ -196,7 +204,7 @@ namespace CaseDetailsUpdater
         }
 
 
-        private void ExecuteUpdateCase(Entity updatecase, Guid cityId)
+        private void ExecuteCaseCityUpdate(Entity updatecase, Guid cityId)
         {
 
             //get the case record and check if the case status is resolved
@@ -227,7 +235,7 @@ namespace CaseDetailsUpdater
 
                     // Close case back to original state
 
-                    //reactivate the case
+                    //Close the case
                     var resolution = new Entity("incidentresolution");
                     resolution["subject"] = "Close Case";
                     resolution["incidentid"] = new EntityReference { Id = caseToUpdate.Id, LogicalName = "incident" };
