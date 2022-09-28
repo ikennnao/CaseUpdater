@@ -111,7 +111,7 @@ namespace CaseDetailsUpdater
         private async void executeqrybtn_Click(object sender, RoutedEventArgs e)
         {
             string query = fetchqry.Text; int recordBeignProcessed = 0; List<Entity> records = new List<Entity>();
-            string cityId = cityGuid.Text; 
+            string WorkflowId = wrkflowGuid.Text; 
             Task<List<Entity>> GetRecordsTask = new Task<List<Entity>>(() =>
             {
                 
@@ -125,24 +125,18 @@ namespace CaseDetailsUpdater
             int recordCount = records.Count();
             
             statuslbl.Content = $"Total number of records is {recordCount}";
-           // Thread.Sleep(5000);
+           
             statuslbl.Content = $"Processing of Case Records...";
-            //Thread.Sleep(3000);
+            
             //start new Task
             foreach (Entity record in records)
             {
                 Task updatecaseTask = new Task(() =>
                 {
                 recordBeignProcessed++;
-                    //Thread.Sleep(1000);
-                    ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest()
-                    {
-                        WorkflowId = new Guid("a452ed63-add0-4e07-bb52-7444ed568a5d"),
-                        EntityId = record.Id
-                    };
-                    ExecuteWorkflowResponse res = (ExecuteWorkflowResponse) CrmServiceClient.Execute(executeWorkflowRequest);
-                    
-                   // ExecuteCaseCityUpdate(record,Guid.Parse(cityId));
+
+                    ExecuteCaseUpdateWithWFId(record, WorkflowId);
+
                 });
                 updatecaseTask.Start();
                 await updatecaseTask;
@@ -257,30 +251,39 @@ namespace CaseDetailsUpdater
 
         }
 
+        private void ExecuteCaseUpdateWithWFId(Entity updatecase, string WorkflowId)
+        {
+            ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest()
+            {
+                WorkflowId = new Guid(WorkflowId),
+                EntityId = updatecase.Id
+            };
+            ExecuteWorkflowResponse res = (ExecuteWorkflowResponse)CrmServiceClient.Execute(executeWorkflowRequest);
+        }
 
 
         private void qryselectorbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             executeqrybtn.IsEnabled = false;
-            cityGuid.Text = string.Empty;
+            wrkflowGuid.Text = string.Empty;
             int selectedItem = qryselectorbox.SelectedIndex;
             if (selectedItem == 0) //applicable to international cities
             {
                 fetchqry.Text = crmQuery.GetQueryForApplicableInternationalCities();
-                cityGuid.Text = "4CB11407-FBDF-EB11-B808-0050560B5C4A"; //International
+                wrkflowGuid.Text = "4CB11407-FBDF-EB11-B808-0050560B5C4A"; //International
                 
             }
 
             else if (selectedItem == 1) //not applicable to international cities
             {
                 fetchqry.Text = crmQuery.GetQueryForNotApplicableInternationalCities();
-                cityGuid.Text = "6A4EDFC3-8343-EB11-BB23-000D3A22C1F6";//riyard
+                wrkflowGuid.Text = "6A4EDFC3-8343-EB11-BB23-000D3A22C1F6";//riyard
             }
 
             else if (selectedItem == 2) //Test
             {
                 fetchqry.Text = crmQuery.GetDevResolvedCases();
-                cityGuid.Text = "2D986ACB-4270-EB11-B804-0050560B5C49";//riyard
+                wrkflowGuid.Text = "a452ed63-add0-4e07-bb52-7444ed568a5d";
             }
 
             if (!string.IsNullOrEmpty(fetchqry.Text))

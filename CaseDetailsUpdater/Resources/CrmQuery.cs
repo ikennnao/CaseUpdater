@@ -162,7 +162,7 @@ namespace CaseDetailsUpdater.Resources
 
       internal string GetDevResolvedCases()
         {
-            string strXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string strXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false' top='30'>
   <entity name='incident'>
     <attribute name='createdon' />
     <attribute name='customerid' />
