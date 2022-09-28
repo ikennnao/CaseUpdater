@@ -29,6 +29,7 @@ namespace CaseDetailsUpdater
         CrmServiceClient CrmServiceClient = null;
         bool connectionState = false;
         Resources.CrmQuery crmQuery = new Resources.CrmQuery();
+        private const string SurveyURLPlaceholder = "Case_Record_GUID";
         string fetchXML;
         public MainWindow()
         {
@@ -244,7 +245,7 @@ namespace CaseDetailsUpdater
             EntityReference entrefRegardingObject = new EntityReference("incident", new Guid("7656623E-C9A8-EB11-B806-0050560B5C48"));
             InstantiateTemplateRequest rqtInstantiateTemplate = new InstantiateTemplateRequest
             {
-                TemplateId = Guid.Parse("04E18245-5C33-ED11-B815-0050560B5C48"),//emailObjInputParams.entTemplate.Id,
+                TemplateId = Guid.Parse("17224546-B49B-EB11-B806-0050560B5C48"),//emailObjInputParams.entTemplate.Id,
                 ObjectId = Guid.Parse("7656623E-C9A8-EB11-B806-0050560B5C48"),
                 ObjectType = "incident"
              };
@@ -259,8 +260,8 @@ namespace CaseDetailsUpdater
                    string strEmailSubject = entEmailTemplate.GetAttributeValue<string>("subject");
                    string strEmailBody = entEmailTemplate.GetAttributeValue<string>("description");
 
-                newBody = strEmailBody.Contains("Case:Record GUID")
-                    ? strEmailBody.Replace("Case:Record%20GUID", "7656623E-C9A8-EB11-B806-0050560B5C48")
+                newBody = strEmailBody.Contains(SurveyURLPlaceholder)
+                    ? strEmailBody.Replace(SurveyURLPlaceholder, "7656623E-C9A8-EB11-B806-0050560B5C48")
                     : strEmailBody;
 
                 Entity entFromAP = new Entity("activityparty");
@@ -316,6 +317,9 @@ namespace CaseDetailsUpdater
             
         }
 
-        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            GetEmailTemplate();
+        }
     }
 }
