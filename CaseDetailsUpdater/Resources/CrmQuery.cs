@@ -19,6 +19,7 @@ namespace CaseDetailsUpdater.Resources
     <attribute name='customerid' />
     <attribute name='ownerid' />
     <attribute name='statuscode' />
+    <attribute name='statecode' />
     <attribute name='tc_subcategory' />
     <attribute name='tc_category' />
     <attribute name='tc_casetype' />
@@ -66,6 +67,49 @@ namespace CaseDetailsUpdater.Resources
         internal string GetQueryForNotApplicableInternationalCities()
         {
             string strXML = string.Empty;
+            //            strXML = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            //  <entity name='incident'>
+            //    <attribute name='createdon' />
+            //    <attribute name='incidentid' />
+            //    <attribute name='customerid' />
+            //    <attribute name='ownerid' />
+            //    <attribute name='statuscode' />
+            //    <attribute name='statecode' />
+            //    <attribute name='tc_subcategory' />
+            //    <attribute name='tc_category' />
+            //    <attribute name='tc_casetype' />
+            //    <attribute name='firstresponseslastatus' />
+            //    <attribute name='tc_caserefno' />
+            //    <attribute name='tc_city' />
+            //    <order attribute='createdon' descending='true' />
+            //    <filter type='and'>
+            //      <condition attribute='tc_city' operator='eq' uiname='Riyadh' uitype='cc_city' value='{6A4EDFC3-8343-EB11-BB23-000D3A22C1F6}' />
+            //      <condition attribute='tc_subcategory' operator='in'>
+            //        <value uiname='VisitSaudi Kiosk/Dispenser' uitype='tc_casesubcategory'>{8B87169D-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Poor service' uitype='tc_casesubcategory'>{1E799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Fake offer' uitype='tc_casesubcategory'>{20799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Contract terms between the visitor and the provider' uitype='tc_casesubcategory'>{22799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Cancellation of reservation without request' uitype='tc_casesubcategory'>{24799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Refund Issue' uitype='tc_casesubcategory'>{26799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{28799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider -  Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{1DE1F7B5-AFD1-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Domestic Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{31C27D10-7EDD-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='International Provider - Poor service' uitype='tc_casesubcategory'>{33CD8240-7EDD-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='International Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{4FFB2E1C-83DD-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='International Provider - Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{7818274D-83DD-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='International Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{0F975063-83DD-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Poor facilities or health &amp; Safety concerns' uitype='tc_casesubcategory'>{6C06CA84-F9DE-EB11-B808-0050560B5C4A}</value>
+            //        <value uiname='Changing Tawakalna Status' uitype='tc_casesubcategory'>{58648A09-A381-EC11-B80A-0050560B5C4A}</value>
+            //      </condition>
+            //      <condition attribute='modifiedby' operator='eq-userid' />
+            //      <condition attribute='modifiedon' operator='today' />
+            //      <condition attribute='statecode' operator='eq' value='0' />
+            //    </filter>
+            //    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_f5be541c782ceb11a813000d3a6540e8'>
+            //      <attribute name='tc_preferredcommunicationlanguage' />
+            //    </link-entity>
+            //  </entity>
+            //</fetch>";
 
             strXML = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
   <entity name='incident'>
@@ -74,6 +118,7 @@ namespace CaseDetailsUpdater.Resources
     <attribute name='customerid' />
     <attribute name='ownerid' />
     <attribute name='statuscode' />
+    <attribute name='statecode' />
     <attribute name='tc_subcategory' />
     <attribute name='tc_category' />
     <attribute name='tc_casetype' />
@@ -86,29 +131,30 @@ namespace CaseDetailsUpdater.Resources
         <value uiname='All Cities' uitype='cc_city'>{6586E025-3DD3-EB11-B808-0050560B5C4A}</value>
         <value uiname='International departure' uitype='cc_city'>{4EC788CE-D78C-EC11-B807-0050560B5C4B}</value>
       </condition>
-      <condition attribute='tc_subcategory' operator='in'>
-        <value uiname='VisitSaudi Kiosk/Dispenser' uitype='tc_casesubcategory'>{8B87169D-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Poor service' uitype='tc_casesubcategory'>{1E799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Fake offer' uitype='tc_casesubcategory'>{20799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Contract terms between the visitor and the provider' uitype='tc_casesubcategory'>{22799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Cancellation of reservation without request' uitype='tc_casesubcategory'>{24799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Refund Issue' uitype='tc_casesubcategory'>{26799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{28799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider -  Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{1DE1F7B5-AFD1-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Domestic Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{31C27D10-7EDD-EB11-B808-0050560B5C4A}</value>
-        <value uiname='International Provider - Poor service' uitype='tc_casesubcategory'>{33CD8240-7EDD-EB11-B808-0050560B5C4A}</value>
-        <value uiname='International Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{4FFB2E1C-83DD-EB11-B808-0050560B5C4A}</value>
-        <value uiname='International Provider - Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{7818274D-83DD-EB11-B808-0050560B5C4A}</value>
-        <value uiname='International Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{0F975063-83DD-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Poor facilities or health &amp; Safety concerns' uitype='tc_casesubcategory'>{6C06CA84-F9DE-EB11-B808-0050560B5C4A}</value>
-        <value uiname='Changing Tawakalna Status' uitype='tc_casesubcategory'>{58648A09-A381-EC11-B80A-0050560B5C4A}</value>
-      </condition>
-    </filter>
-    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_f5be541c782ceb11a813000d3a6540e8'>
-      <attribute name='tc_preferredcommunicationlanguage' />
-    </link-entity>
-  </entity>
-</fetch>";
+
+                  <condition attribute='tc_subcategory' operator='in'>
+                    <value uiname='VisitSaudi Kiosk/Dispenser' uitype='tc_casesubcategory'>{8B87169D-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Poor service' uitype='tc_casesubcategory'>{1E799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Fake offer' uitype='tc_casesubcategory'>{20799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Contract terms between the visitor and the provider' uitype='tc_casesubcategory'>{22799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Cancellation of reservation without request' uitype='tc_casesubcategory'>{24799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Refund Issue' uitype='tc_casesubcategory'>{26799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{28799BAF-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider -  Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{1DE1F7B5-AFD1-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Domestic Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{31C27D10-7EDD-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='International Provider - Poor service' uitype='tc_casesubcategory'>{33CD8240-7EDD-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='International Provider - Non-adherence to COVID Guidelines' uitype='tc_casesubcategory'>{4FFB2E1C-83DD-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='International Provider - Mistreatment / refusal of entry' uitype='tc_casesubcategory'>{7818274D-83DD-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='International Provider - No booking upon arrival at accommodation' uitype='tc_casesubcategory'>{0F975063-83DD-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Poor facilities or health &amp; Safety concerns' uitype='tc_casesubcategory'>{6C06CA84-F9DE-EB11-B808-0050560B5C4A}</value>
+                    <value uiname='Changing Tawakalna Status' uitype='tc_casesubcategory'>{58648A09-A381-EC11-B80A-0050560B5C4A}</value>
+                  </condition>
+                </filter>
+                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_f5be541c782ceb11a813000d3a6540e8'>
+                  <attribute name='tc_preferredcommunicationlanguage' />
+                </link-entity>
+              </entity>
+            </fetch>";
 
             return strXML;
         }
@@ -131,9 +177,7 @@ namespace CaseDetailsUpdater.Resources
     <attribute name='tc_caserefno' />
     <attribute name='tc_city' />
     <order attribute='createdon' descending='true' />
-    <filter type='and'>
-      <condition attribute='statecode' operator='eq' value='1' />
-    </filter>
+    
     <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_f5be541c782ceb11a813000d3a6540e8'>
       <attribute name='tc_preferredcommunicationlanguage' />
     </link-entity>

@@ -24,3 +24,27 @@ C:\Users\ioparaugo001\source\repos\CaseDetailsUpdater\CaseDetailsUpdater\obj\Deb
 C:\Users\ioparaugo001\source\repos\CaseDetailsUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.CopyComplete
 C:\Users\ioparaugo001\source\repos\CaseDetailsUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.exe
 C:\Users\ioparaugo001\source\repos\CaseDetailsUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.pdb
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.AssemblyReference.cache
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.SuggestedBindingRedirects.cache
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\MainWindow.g.cs
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\App.g.cs
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater_MarkupCompile.cache
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater_MarkupCompile.lref
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.exe
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.pdb
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\CaseDetailsUpdater.exe.config
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\CaseDetailsUpdater.exe
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\CaseDetailsUpdater.pdb
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.Xrm.Sdk.Deployment.dll
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.Xrm.Sdk.xml
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.Xrm.Tooling.Connector.xml
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\MainWindow.baml
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.g.resources
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.Properties.Resources.resources
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.GenerateResource.cache
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.CoreCompileInputs.cache
+D:\Github Files\CaseUpdater\CaseDetailsUpdater\obj\Debug\CaseDetailsUpdater.csproj.CopyComplete
