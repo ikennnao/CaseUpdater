@@ -177,9 +177,7 @@ namespace CaseDetailsUpdater.Resources
     <attribute name='tc_caserefno' />
     <attribute name='tc_city' />
     <order attribute='createdon' descending='true' />
-    <filter type='and'>
-      <condition attribute='statecode' operator='eq' value='1' />
-    </filter>
+    
     <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_f5be541c782ceb11a813000d3a6540e8'>
       <attribute name='tc_preferredcommunicationlanguage' />
     </link-entity>
